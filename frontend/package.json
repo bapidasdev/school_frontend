@@ -9,10 +9,6 @@
     "lint": "eslint .",
     "preview": "vite preview"
   },
-  "vercel": {
-    "buildCommand": "npm run build",
-    "outputDirectory": "dist"
-  },
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
