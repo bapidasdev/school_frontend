@@ -28,7 +28,7 @@ function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const { authenticated, user } = React.useContext(AuthContext);
-  const  [dashboardLink, setDashboardLink] = React.useState('/')
+  const [dashboardLink, setDashboardLink] = React.useState('/')
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
@@ -49,14 +49,14 @@ function Navbar() {
     <AppBar style={{
       backgroundColor: theme.palette.background.paper,
       color: theme.palette.text.primary,
-      padding: '20px 0',
+      padding: '5px 0',
       textAlign: 'center',
       marginTop: 'auto',
     }}
-     position="static">
+      position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Link className="nav-list" style={{textDecoration:"none"}} to={'/'}>
+          <Link className="nav-list" style={{ textDecoration: "none" }} to={'/'}>
             <Typography
               variant="h6"
               sx={{
@@ -66,12 +66,12 @@ function Navbar() {
                 fontWeight: 700,
                 letterSpacing: '.3rem',
                 color: 'inherit',
-                alignItems:"center"
+                alignItems: "center"
               }}
               className='text-beautify'
             >
               <img src='./images/static/school_management_system.png' height={"90px"} width={'90px'} />
-            MULTIPLE SCHOOL MANAGEMENT SYSTEM
+              MULTIPLE SCHOOL MANAGEMENT SYSTEM
             </Typography>
           </Link>
 
@@ -103,31 +103,31 @@ function Navbar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-           
 
-            
 
-             {!authenticated && <><MenuItem onClick={handleCloseNavMenu}>
+
+
+              {!authenticated && <><MenuItem onClick={handleCloseNavMenu}>
                 <Button className='button-beautify button-beautify-one' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', }} >
                   <Box sx={{ display: 'flex', flexDirection: 'row' }} className="button-box">
                     Register
                   </Box>
                 </Button>
               </MenuItem>
-              
-              <MenuItem onClick={handleCloseNavMenu}>
-              <Button className='button-beautify button-beautify-one' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', }} >
-                <Box sx={{ display: 'flex', flexDirection: 'row' }} className="button-box">
-                <LoginIcon sx={{ marginRight: "5px" }} />
-                 Login
-                </Box>
-              </Button>
-            </MenuItem>
-            </>
-              }
-             
 
-             
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Button className='button-beautify button-beautify-one' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', }} >
+                    <Box sx={{ display: 'flex', flexDirection: 'row' }} className="button-box">
+                      <LoginIcon sx={{ marginRight: "5px" }} />
+                      Login
+                    </Box>
+                  </Button>
+                </MenuItem>
+              </>
+              }
+
+
+
 
             </Menu>
           </Box>
@@ -153,49 +153,49 @@ function Navbar() {
             </Typography></Link>
 
 
-      
+
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, justifyContent: "flex-end" }}>
-          {!authenticated && 
-          <>
-         
-            <Link className="nav-list" to={'/login'}>
-              <Button className='button-beautify button-beautify-one' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', }} >
-                <Box sx={{ display: 'flex', flexDirection: 'row' }} className="button-box">
-                  <LoginIcon sx={{ marginRight: "5px" }} />
-                  Login
-                </Box>
-              </Button>
-            </Link>
-          
-            <Link className="nav-list" to={'/register'}>
-              <Button className='button-beautify button-beautify-one' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', }} >
-                <Box sx={{ display: 'flex', flexDirection: 'row' }} className="button-box">
-                  Register
-                </Box>
-              </Button>
-            </Link>
-          </>}
-          
+            {!authenticated &&
+              <>
+
+                <Link className="nav-list" to={'/login'}>
+                  <Button className='button-beautify button-beautify-one' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', }} >
+                    <Box sx={{ display: 'flex', flexDirection: 'row' }} className="button-box">
+                      <LoginIcon sx={{ marginRight: "5px" }} />
+                      Login
+                    </Box>
+                  </Button>
+                </Link>
+
+                <Link className="nav-list" to={'/register'}>
+                  <Button className='button-beautify button-beautify-one' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', }} >
+                    <Box sx={{ display: 'flex', flexDirection: 'row' }} className="button-box">
+                      Register
+                    </Box>
+                  </Button>
+                </Link>
+              </>}
 
 
-           {authenticated && 
-           <Link className="nav-list" to={'/logout'}>
-           <Button className='button-beautify button-beautify-danger' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white',  }} >
-               <Box sx={{display: 'flex', flexDirection: 'row'}} className="button-box">
-               Log Out
-               </Box>
-             </Button>
-           </Link>
-           }
-            
+
+            {authenticated &&
+              <Link className="nav-list" to={'/logout'}>
+                <Button className='button-beautify button-beautify-danger' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', }} >
+                  <Box sx={{ display: 'flex', flexDirection: 'row' }} className="button-box">
+                    Log Out
+                  </Box>
+                </Button>
+              </Link>
+            }
+
             {authenticated && <Link className="nav-list" to={`${user.role.toLowerCase()}`}>
-              <Button className='button-beautify button-beautify-one' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white'}} >
-              <Box sx={{display: 'flex', flexDirection: 'row',color:"#fff",zIndex:999}} className="button-box">
-                Dashboard
+              <Button className='button-beautify button-beautify-one' onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white' }} >
+                <Box sx={{ display: 'flex', flexDirection: 'row', color: "#fff", zIndex: 999 }} className="button-box">
+                  Dashboard
                 </Box>
               </Button>
             </Link>}
-            
+
           </Box>
         </Toolbar>
       </Container>

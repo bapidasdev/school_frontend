@@ -21,87 +21,94 @@ import LockIcon from "@mui/icons-material/Lock";
 import { AuthContext } from "../../../context/AuthContext";
 import CustomizedSnackbars from "../../../basic utility components/CustomizedSnackbars";
 
-
 export default function Login() {
     const { authenticated, login } = useContext(AuthContext);
-
-    const [loginType, setLoginType] = useState("student")
+    const [loginType, setLoginType] = useState("student");
     const [message, setMessage] = useState("");
-    const [type, setType] = useState("succeess");
+    const [type, setType] = useState("success");
+    const navigate = useNavigate();
 
-    const navigate = useNavigate()
-
-
-    const resetMessage = () => {
-        setMessage("")
-    }
+    const resetMessage = () => setMessage("");
 
     const handleSelection = (e) => {
-        setLoginType(e.target.value)
+        setLoginType(e.target.value);
         resetInitialValue();
-
-    }
+    };
 
     const resetInitialValue = () => {
         Formik.setFieldValue("email", "");
-        Formik.setFieldValue("password", "")
-    }
+        Formik.setFieldValue("password", "");
+    };
 
-    const initialValues = {
-        email: "",
-        password: ""
-    }
+    const initialValues = { email: "", password: "" };
+
     const Formik = useFormik({
-        initialValues: initialValues,
+        initialValues,
         validationSchema: loginSchema,
         onSubmit: (values) => {
-            console.log("Login Formik values", values)
             let url;
             let navUrl;
-            if (loginType == "school_owner") {
+            if (loginType === "school_owner") {
                 url = `${baseUrl}/school/login`;
-                navUrl = '/school'
-            } else if (loginType == "teacher") {
-                url = `${baseUrl}/teacher/login`
-                navUrl = '/teacher'
-            } else if (loginType == "student") {
-                url = `${baseUrl}/student/login`
-                navUrl = '/student'
+                navUrl = "/school";
+            } else if (loginType === "teacher") {
+                url = `${baseUrl}/teacher/login`;
+                navUrl = "/teacher";
+            } else {
+                url = `${baseUrl}/student/login`;
+                navUrl = "/student";
             }
-            axios.post(url, { ...values }).then(resp => {
-                setMessage(resp.data.message)
-                setType("success")
-                let token = resp.headers.get("Authorization");
-                if (resp.data.success) {
-                    localStorage.setItem("token", token);
-                    localStorage.setItem("user", JSON.stringify(resp.data.user));
-                    navigate(navUrl)
-                    login(resp.data.user)
-                }
-                Formik.resetForm();
-            }).catch(e => {
-                setMessage(e.response.data.message);
-                setType("error")
-                console.log("Error in  register submit", e.response.data.message)
-            })
-
-
-        }
-    })
+            axios
+                .post(url, { ...values })
+                .then((resp) => {
+                    setMessage(resp.data.message);
+                    setType("success");
+                    let token = resp.headers.get("Authorization");
+                    if (resp.data.success) {
+                        localStorage.setItem("token", token);
+                        localStorage.setItem("user", JSON.stringify(resp.data.user));
+                        navigate(navUrl);
+                        login(resp.data.user);
+                    }
+                    Formik.resetForm();
+                })
+                .catch((e) => {
+                    setMessage(e.response.data.message);
+                    setType("error");
+                });
+        },
+    });
 
     return (
         <Box
             sx={{
                 height: "100vh",
                 width: "100vw",
-                background: "#1E40AF",
+                backgroundImage:
+                    'url("https://png.pngtree.com/thumb_back/fh260/back_pic/05/12/61/51599a3b852f170.jpg")',
+                backgroundSize: "cover",
+                backgroundPosition: "center",
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                position: "relative",
                 padding: 2,
                 boxSizing: "border-box",
             }}
         >
+            {/* Dark overlay */}
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "rgba(0, 0, 0, 0.5)",
+                    zIndex: 1,
+                }}
+            />
+
             {message && (
                 <CustomizedSnackbars
                     reset={resetMessage}
@@ -113,11 +120,13 @@ export default function Login() {
             <Paper
                 elevation={10}
                 sx={{
+                    zIndex: 2,
                     padding: 5,
                     borderRadius: 3,
                     width: "100%",
                     maxWidth: 420,
-                    backgroundColor: "#1E3A8A",
+                    backgroundColor: "rgba(255,255,255,0.05)",
+                    backdropFilter: "blur(10px)",
                     color: "#fff",
                     textAlign: "center",
                 }}
@@ -125,28 +134,42 @@ export default function Login() {
                 {/* Logo */}
                 <Box sx={{ mb: 4 }}>
                     <img
-                        src="https://cdn-icons-png.flaticon.com/512/747/747545.png"
+                        src="https://img.icons8.com/ios-filled/100/ffffff/graduation-cap.png"
                         alt="login"
                         width={70}
                         height={70}
                         style={{ margin: "auto" }}
                     />
-
-
                 </Box>
 
                 {/* Form */}
                 <Box component="form" onSubmit={Formik.handleSubmit} noValidate>
                     <FormControl fullWidth sx={{ marginBottom: 2 }}>
-                        <InputLabel sx={{ color: "#fff" }} id="user-type-label">
+
+                        <InputLabel
+                            id="user-type-label"
+                            sx={{
+                                color: "#fff",
+                                "&.Mui-focused": {
+                                    color: "#fff",
+                                },
+                            }}
+                        >
                             User Type
                         </InputLabel>
                         <Select
                             labelId="user-type-label"
+                            id="user-type"
+                            label="User Type"
                             value={loginType}
                             onChange={handleSelection}
                             sx={{
                                 color: "#fff",
+                                textAlign: "left",
+                                ".MuiSelect-select": {
+                                    textAlign: "left",
+                                    paddingLeft: 2,
+                                },
                                 ".MuiOutlinedInput-notchedOutline": {
                                     borderColor: "#fff",
                                 },
@@ -156,9 +179,14 @@ export default function Login() {
                                 "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
                                     borderColor: "#fff",
                                 },
+                                ".MuiSvgIcon-root": {
+                                    color: "#fff",
+                                },
+                                borderRadius: 2,
+                                backgroundColor: "rgba(255,255,255,0.05)",
                             }}
                         >
-                            <MenuItem value="student">Student </MenuItem>
+                            <MenuItem value="student">Student</MenuItem>
                             <MenuItem value="teacher">Teacher</MenuItem>
                             <MenuItem value="school_owner">School Owner</MenuItem>
                         </Select>
@@ -182,6 +210,7 @@ export default function Login() {
                                 "& fieldset": { borderColor: "#fff" },
                                 "&:hover fieldset": { borderColor: "#fff" },
                                 "&.Mui-focused fieldset": { borderColor: "#fff" },
+                                backgroundColor: "rgba(255,255,255,0.05)",
                             },
                         }}
                         InputProps={{
@@ -202,16 +231,21 @@ export default function Login() {
                         value={Formik.values.password}
                         onChange={Formik.handleChange}
                         onBlur={Formik.handleBlur}
-                        error={Boolean(Formik.touched.password && Formik.errors.password)}
-                        helperText={Formik.touched.password && Formik.errors.password}
+                        error={Boolean(
+                            Formik.touched.password && Formik.errors.password
+                        )}
+                        helperText={
+                            Formik.touched.password && Formik.errors.password
+                        }
                         sx={{
                             marginBottom: 3,
                             input: { color: "#fff" },
                             "& .MuiOutlinedInput-root": {
                                 borderRadius: 2,
                                 "& fieldset": { borderColor: "#fff" },
-                                "&:hover fieldset": { borderColor: "#fff" },
+                                "&:hover fieldset": { borderColor: "#ff" },
                                 "&.Mui-focused fieldset": { borderColor: "#fff" },
+                                backgroundColor: "rgba(255,255,255,0.05)",
                             },
                         }}
                         InputProps={{
@@ -229,24 +263,24 @@ export default function Login() {
                         fullWidth
                         sx={{
                             backgroundColor: "#fff",
-                            color: "#1E40AF",
+                            color: "black",
                             fontWeight: "bold",
                             paddingY: 1.2,
                             fontSize: "1rem",
                             marginBottom: 2,
+                            borderRadius: 2,
+                            background: '#fff',
                             "&:hover": {
-                                backgroundColor: "#e2e8f0",
+                                backgroundColor: "black",
+                                color: '#fff'
+
                             },
                         }}
                     >
                         LOGIN
                     </Button>
-
-
                 </Box>
             </Paper>
-
         </Box>
-
     );
 }
