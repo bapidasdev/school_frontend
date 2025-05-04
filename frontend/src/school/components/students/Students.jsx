@@ -18,6 +18,10 @@ import CustomizedSnackbars from "../../../basic utility components/CustomizedSna
 import { studentSchema } from "../../../yupSchema/studentSchema";
 import StudentCardAdmin from "../../utility components/student card/StudentCard";
 
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
 export default function Students() {
   const [studentClass, setStudentClass] = useState([]);
   const [students, setStudents] = useState([]);
@@ -65,6 +69,16 @@ export default function Students() {
         });
     }
   };
+  const bloodGroups = [
+    "A+",
+    "A-",
+    "B+",
+    "B-",
+    "AB+",
+    "AB-",
+    "O+",
+    "O-"
+  ]
 
   const handleEdit = (id) => {
     setEdit(true);
@@ -106,9 +120,9 @@ export default function Students() {
     student_class: "",
     gender: "",
     age: "",
-    address:"",
-    dob:"",
-    blood_group:"",
+    address: "",
+    dob: "",
+    blood_group: "",
     guardian: "",
     guardian_phone: "",
     password: "",
@@ -391,17 +405,52 @@ export default function Students() {
                 </p>
               )}
 
+              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
+                <DatePicker
+                  label="Date of Birth"
+                  value={Formik.values.dob}
+                  onChange={(newValue) => {
+                    Formik.setFieldValue("dob", newValue);
+                  }}
+                  onBlur={Formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      sx={{ marginTop: "10px" }}
+                      name="dob"
+                    />
+                  )}
+                />
+              </LocalizationProvider>
+
+              {Formik.touched.dob && Formik.errors.dob && (
+                <p style={{ color: "red", textTransform: "capitalize" }}>
+                  {Formik.errors.dob}
+                </p>
+              )} */}
+
+
+
               <TextField
                 fullWidth
+                select
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
+                id="blood-group"
                 label="Blood Group"
                 variant="outlined"
                 name="blood_group"
                 value={Formik.values.blood_group}
                 onChange={Formik.handleChange}
                 onBlur={Formik.handleBlur}
-              />
+              >
+                {bloodGroups.map((group) => (
+                  <MenuItem key={group} value={group}>
+                    {group}
+                  </MenuItem>
+                ))}
+              </TextField>
+
               {Formik.touched.blood_group && Formik.errors.blood_group && (
                 <p style={{ color: "red", textTransform: "capitalize" }}>
                   {Formik.errors.blood_group}
@@ -429,24 +478,29 @@ export default function Students() {
               )}
 
 
-
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
-                label="Guardian Phone "
+                id="guardian-phone"
+                label="Guardian Phone"
                 variant="outlined"
                 name="guardian_phone"
+                type="number" // only allows numeric input
                 value={Formik.values.guardian_phone}
                 onChange={Formik.handleChange}
                 onBlur={Formik.handleBlur}
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*',
+                }}
               />
-              {Formik.touched.guardian_phone &&
-                Formik.errors.guardian_phone && (
-                  <p style={{ color: "red", textTransform: "capitalize" }}>
-                    {Formik.errors.guardian_phone}
-                  </p>
-                )}
+
+              {Formik.touched.guardian_phone && Formik.errors.guardian_phone && (
+                <p style={{ color: "red", textTransform: "capitalize" }}>
+                  {Formik.errors.guardian_phone}
+                </p>
+              )}
+
 
               {!isEdit && (
                 <>

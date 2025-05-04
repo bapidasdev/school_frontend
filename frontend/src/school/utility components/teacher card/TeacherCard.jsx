@@ -3,9 +3,7 @@
 import { styled } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
-import Grid from "@mui/material/Grid2";
 import { Button, Typography } from "@mui/material";
-import TextField from "@mui/material/TextField";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -20,6 +18,7 @@ const Item = styled(Paper)(({ theme }) => ({
   boxShadow: "none",
   textTransform: "uppercase",
 }));
+
 export default function TeacherCardAdmin({
   handleEdit,
   teacher,
@@ -34,74 +33,62 @@ export default function TeacherCardAdmin({
     return dateNu + "/" + month + "/" + year;
   };
 
-
   return (
-    <>
-      <Card sx={{ maxWidth: 545,margin:2 }}>
-        <CardMedia
-          component="img"
-          alt="green iguana"
-          height="340"
-          image={`/images/uploaded/teacher/${teacher.teacher_image}`}
-        />
-        <CardContent>
-          <Typography
-            component={"div"}
-            sx={{ typography: "text.secondary" }}
-            variant="h5"
-          >
-            <b>Name :</b>
-            <span>{teacher.name}</span>
-          </Typography>
-          <Typography component={"div"} variant="h5">
-            <b>Email :</b>
-            {teacher.email}
-          </Typography>
-          <Typography component={"div"} variant="h5">
-            <b>Age :</b>
-            {teacher.age}
-          </Typography>
-          <Typography component={"div"} variant="h5">
-            <b>Gender :</b>
-            {teacher.gender}
-          </Typography>
-          <Typography component={"div"} variant="h5">
-            <b>Qualification:</b>
-            {teacher.qualification}
-          </Typography>
-          <Typography component={"div"} variant="p">
-                  <b>Date of Join:</b>
-                  <span>{convertDate(teacher.createdAt)}</span>{" "}
-                </Typography>
-        </CardContent>
-        <CardActions>
-          {/* <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button> */}
-          {/* <Box component={'div'} sx={{position:"absolute",width:"100%", bottom:0, display:'flex',justifyContent:"end"}} > */}
-          <Button
+    <Card sx={{ maxWidth: 345, margin: 2, borderRadius: 2, boxShadow: 3 }}>
+      <CardMedia
+        component="img"
+        alt={teacher.name}
+        image={`/images/uploaded/teacher/${teacher.teacher_image}`}
+        sx={{
+          borderRadius: "8px 8px 0 0",
+          objectFit: "cover", // This ensures the image covers the area without being distorted
+          height: "200px", // Fixed height
+        }}
+      />
+      <CardContent sx={{ padding: 3 }}>
+        <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
+          <b>Name :</b> <span>{teacher.name}</span>
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+          <b>Email :</b> {teacher.email}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+          <b>Age :</b> {teacher.age}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+          <b>Gender :</b> {teacher.gender}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+          <b>Qualification:</b> {teacher.qualification}
+        </Typography>
+        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
+          <b>Date of Join:</b> <span>{convertDate(teacher.createdAt)}</span>
+        </Typography>
+      </CardContent>
+      <CardActions sx={{ display: "flex", justifyContent: "space-between", padding: "16px" }}>
+        <Button
           size="small"
-            variant="contained"
-            sx={{ background: "red", color: "#fff" }}
-            onClick={() => {
-              handleDelete(teacher._id);
-            }}
-          >
-            Delete
-          </Button>
-          <Button
+          variant="contained"
+          color="error"
+          sx={{ width: "45%" }}
+          onClick={() => {
+            handleDelete(teacher._id);
+          }}
+        >
+          Delete
+        </Button>
+        <Button
           size="small"
-            variant="contained"
-            sx={{ background: "gold", color: "#222222" }}
-            onClick={() => {
-              handleEdit(teacher._id);
-            }}
-          >
-            Edit
-          </Button>
-          {/* </Box> */}
-        </CardActions>
-      </Card>
-      
-    </>
+          variant="contained"
+          color="warning"
+          sx={{ width: "45%" }}
+          onClick={() => {
+            handleEdit(teacher._id);
+          }}
+        >
+          Edit
+        </Button>
+      </CardActions>
+    </Card>
   );
 }
