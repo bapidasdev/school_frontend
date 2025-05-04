@@ -157,9 +157,12 @@ export default function Student() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        School Management System Student
+                    R.C. Academy
                     </Typography>
+
+                  
                 </Toolbar>
+            
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader >

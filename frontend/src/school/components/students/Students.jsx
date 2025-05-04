@@ -78,6 +78,9 @@ export default function Students() {
           student_class: data.student_class._id,
           gender: data.gender,
           age: data.age,
+          address: data.address,
+          dob: data.dob,
+          blood_group: data.blood_group,
           guardian: data.guardian,
           guardian_phone: data.guardian_phone,
           password: data.password,
@@ -103,6 +106,9 @@ export default function Students() {
     student_class: "",
     gender: "",
     age: "",
+    address:"",
+    dob:"",
+    blood_group:"",
     guardian: "",
     guardian_phone: "",
     password: "",
@@ -248,8 +254,8 @@ export default function Students() {
                   </Box>
                 )}
               </Box>
-               {/* Other input fields go here */}
-               <TextField
+              {/* Other input fields go here */}
+              <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
                 id="filled-basic"
@@ -350,6 +356,60 @@ export default function Students() {
                   {Formik.errors.age}
                 </p>
               )}
+              {/* ------------------------------------------------------------------------------------------------- */}
+              <TextField
+                fullWidth
+                sx={{ marginTop: "10px" }}
+                id="filled-basic"
+                label="Address"
+                variant="outlined"
+                name="address"
+                value={Formik.values.address}
+                onChange={Formik.handleChange}
+                onBlur={Formik.handleBlur}
+              />
+              {Formik.touched.address && Formik.errors.address && (
+                <p style={{ color: "red", textTransform: "capitalize" }}>
+                  {Formik.errors.address}
+                </p>
+              )}
+
+              <TextField
+                fullWidth
+                sx={{ marginTop: "10px" }}
+                id="filled-basic"
+                label="Date Of Birth"
+                variant="outlined"
+                name="dob"
+                value={Formik.values.dob}
+                onChange={Formik.handleChange}
+                onBlur={Formik.handleBlur}
+              />
+              {Formik.touched.dob && Formik.errors.dob && (
+                <p style={{ color: "red", textTransform: "capitalize" }}>
+                  {Formik.errors.dob}
+                </p>
+              )}
+
+              <TextField
+                fullWidth
+                sx={{ marginTop: "10px" }}
+                id="filled-basic"
+                label="Blood Group"
+                variant="outlined"
+                name="blood_group"
+                value={Formik.values.blood_group}
+                onChange={Formik.handleChange}
+                onBlur={Formik.handleBlur}
+              />
+              {Formik.touched.blood_group && Formik.errors.blood_group && (
+                <p style={{ color: "red", textTransform: "capitalize" }}>
+                  {Formik.errors.blood_group}
+                </p>
+              )}
+
+
+              {/* ------------------------------------------------------------------------------------------------- */}
 
               <TextField
                 fullWidth
@@ -367,6 +427,8 @@ export default function Students() {
                   {Formik.errors.guardian}
                 </p>
               )}
+
+
 
               <TextField
                 fullWidth
@@ -386,7 +448,7 @@ export default function Students() {
                   </p>
                 )}
 
-{!isEdit && (
+              {!isEdit && (
                 <>
                   <TextField
                     fullWidth
@@ -406,7 +468,7 @@ export default function Students() {
                   )}
                 </>
               )}
-              
+
               <Button
                 type="submit"
                 fullWidth

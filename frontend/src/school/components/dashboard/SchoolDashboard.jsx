@@ -22,6 +22,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import CustomizedSnackbars from "../../../basic utility components/CustomizedSnackbars";
 import { StudentIcon } from "../../../icons/Student_icon";
 import { TeacherIcon } from "../../../icons/Teacher_icon";
+
 ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: "#fff",
@@ -73,10 +74,10 @@ const SchoolDashboard = () => {
     const fetchData = async () => {
       try {
         const studentRes = await axios.get(
-          `${baseUrl}/student/fetch-with-query`,{params:{}}
+          `${baseUrl}/student/fetch-with-query`, { params: {} }
         );
         const teacherRes = await axios.get(
-          `${baseUrl}/teacher/fetch-with-query`,{params:{}}
+          `${baseUrl}/teacher/fetch-with-query`, { params: {} }
         );
         const classesRes = await axios.get(`${baseUrl}/class/fetch-all`);
         const subjectsRes = await axios.get(`${baseUrl}/subject/fetch-all`);
@@ -132,7 +133,7 @@ const SchoolDashboard = () => {
     ],
   };
 
-  const handleSchoolEdit = ()=>{
+  const handleSchoolEdit = () => {
     setSchoolEdit(true)
     setImageUrl(null)
   }
@@ -160,7 +161,7 @@ const SchoolDashboard = () => {
     // setImageUrl(null); // Clear the image preview
   };
 
-const handleSubmit = (e)=>{
+  const handleSubmit = (e) => {
     e.preventDefault();
     const fd = new FormData();
     fd.append("school_name", schoolName)
@@ -181,132 +182,89 @@ const handleSubmit = (e)=>{
         setMessage(e.response.data.message);
         setType("error");
       });
-  
-}
+
+  }
   return (
     <Box sx={{ p: 3 }}>
-       {message && (
+      {message && (
         <CustomizedSnackbars
           reset={resetMessage}
           type={type}
           message={message}
         />
       )}
-      {schoolEdit && 
-      <Paper sx={{maxWidth:'780px', margin:"auto",padding:"10px", marginTop:"120px"}} >
-       <Box
-       component="form"
-       noValidate
-       autoComplete="off" >
-       <Box
-         sx={{
-          display:'flex',
-          flexDirection:'column'
-         }}
-       >
-         <Typography sx={{ marginRight: "50px" }} variant="h4"> School Pic </Typography>
+      {schoolEdit &&
+        <Paper sx={{ maxWidth: '780px', margin: "auto", padding: "10px", marginTop: "120px" }} >
+          <Box
+            component="form"
+            noValidate
+            autoComplete="off" >
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+            >
+              <Typography sx={{ marginRight: "50px" }} variant="h4"> School Pic </Typography>
 
-         <TextField
-           name="file"
-           type="file"
-           onChange={addImage}
-           inputRef={fileInputRef}
-         />
-         {imageUrl &&  
-             <CardMedia
-               component="img"
-               sx={{marginTop:'10px'}}
-               image={imageUrl}
-               height="440px"
-             /> 
-         }
-       </Box>
-        <TextField
-         fullWidth
-         sx={{ marginTop: "10px" }}
-         value={schoolName}
-         id="filled-basic"
-         label="School Name "
-         variant="outlined"
-         onChange={e=>{setSchoolName(e.target.value)}}
-       />
-       <Box>
-       <Button
-           onClick={handleSubmit} 
-           variant="outlined" 
-           sx={{ marginTop: "10px",marginRight:'5px' }} >
-          Submit
-         </Button>
+              <TextField
+                name="file"
+                type="file"
+                onChange={addImage}
+                inputRef={fileInputRef}
+              />
+              {imageUrl &&
+                <CardMedia
+                  component="img"
+                  sx={{ marginTop: '10px' }}
+                  image={imageUrl}
+                  height="440px"
+                />
+              }
+            </Box>
+            <TextField
+              fullWidth
+              sx={{ marginTop: "10px" }}
+              value={schoolName}
+              id="filled-basic"
+              label="School Name "
+              variant="outlined"
+              onChange={e => { setSchoolName(e.target.value) }}
+            />
+            <Box>
+              <Button
+                onClick={handleSubmit}
+                variant="outlined"
+                sx={{ marginTop: "10px", marginRight: '5px' }} >
+                Submit
+              </Button>
 
-         <Button
-           onClick={()=>{setSchoolEdit(false)}}
-           variant="outlined"
-           sx={{ marginTop: "10px" }}
-         >
-          Cancel
-         </Button>
-       </Box>
-       
+              <Button
+                onClick={() => { setSchoolEdit(false) }}
+                variant="outlined"
+                sx={{ marginTop: "10px" }}
+              >
+                Cancel
+              </Button>
+            </Box>
 
-       </Box>
 
-      </Paper>
+          </Box>
+
+        </Paper>
 
       }
-    
-             <Typography variant="h4" gutterBottom>
-               Dashboard {schoolDetails && `[ ${schoolDetails.school_name} ]`}
-             </Typography>
 
-           {preview &&  
-            <Box sx={{position:"fixed", top:'0',left:'0', zIndex:'9999',height:'100vh',
-              width:"100%",background:'black',padding:'10px'}}>
-                <Box sx={{height:"100%", width:"100%"}}>
-              <CardMedia
-               component="img"
-               image={`/images/uploaded/school/${schooImage}`}
-               height="100%"
-             /> 
-             <Button onClick={()=>{setPreview(false)}} sx={{color:'#fff',background:'tomato',position:'absolute', right:'10px', top:"47%"}}> X</Button>
-             </Box>
-             </Box>
-           }
-
-      {schoolDetails && (
-        <Box
-          sx={{
-            position:'relative',
-            height: "500px",
-            width: "auto",
-            background: `url(/images/uploaded/school/${schoolDetails.school_image})`,
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <Typography variant="h2">{schoolDetails.school_name}</Typography>
-          <Box sx={{position:'absolute', bottom:'10px',right:'10px'}} >
-            <Button onClick={()=>{setPreview(true)}}>
-              <PreviewIcon sx={{color:"#fff", fontSize:'40px'}}/>
-            </Button>
-          
-          <IconButton sx={{background:'white'}} onClick={handleSchoolEdit} color="primary">
-            <EditIcon />
-          </IconButton>
-          </Box>
-        </Box>
-      )}
-
-
+      {/* <Typography variant="h4" gutterBottom>
+         {schoolDetails && `[ ${schoolDetails.school_name} ]`}
+      </Typography> */}
 
       <Grid2 container spacing={3}>
         {/* Total Students */}
         <Grid2 size={{ xs: 12, md: 6 }}>
           <Item>
             <Paper sx={{ p: 2 }}>
-            <StudentIcon width={"50px"} height={"50px"}/>
+              <StudentIcon width={"50px"} height={"50px"} />
               <Typography variant="h6">  Total Students</Typography>
               <Typography variant="h4">{totalStudents}</Typography>
             </Paper>

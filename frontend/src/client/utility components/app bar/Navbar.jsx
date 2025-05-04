@@ -71,7 +71,7 @@ function Navbar() {
               className='text-beautify'
             >
               <img src='./images/static/school_management_system.png' height={"90px"} width={'90px'} />
-              MULTIPLE SCHOOL MANAGEMENT SYSTEM
+              RC Academy
             </Typography>
           </Link>
 

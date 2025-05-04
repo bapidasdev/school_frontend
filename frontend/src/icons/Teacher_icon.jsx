@@ -473,6 +473,7 @@ export const TeacherIcon = ({ width, height }) => {
             </g>
 
         </svg>
+      
     )
 }
 

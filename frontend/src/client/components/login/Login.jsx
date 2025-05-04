@@ -21,6 +21,8 @@ import LockIcon from "@mui/icons-material/Lock";
 import { AuthContext } from "../../../context/AuthContext";
 import CustomizedSnackbars from "../../../basic utility components/CustomizedSnackbars";
 
+import bg from "../../../assets/background_img.jpg"
+
 export default function Login() {
     const { authenticated, login } = useContext(AuthContext);
     const [loginType, setLoginType] = useState("student");
@@ -84,8 +86,7 @@ export default function Login() {
             sx={{
                 height: "100vh",
                 width: "100vw",
-                backgroundImage:
-                    'url("https://png.pngtree.com/thumb_back/fh260/back_pic/05/12/61/51599a3b852f170.jpg")',
+                backgroundImage:`url(${bg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 display: "flex",
@@ -157,6 +158,7 @@ export default function Login() {
                         >
                             User Type
                         </InputLabel>
+                        
                         <Select
                             labelId="user-type-label"
                             id="user-type"
@@ -191,6 +193,7 @@ export default function Login() {
                             <MenuItem value="school_owner">School Owner</MenuItem>
                         </Select>
                     </FormControl>
+
 
                     <TextField
                         fullWidth

@@ -164,7 +164,7 @@ export default function Teacher() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                        School Management System
+                    RC Academy
                     </Typography>
                 </Toolbar>
             </AppBar>

@@ -222,7 +222,7 @@ export default function Students() {
                     }}
                   >
                     <Typography sx={{ marginRight: "50px" }} variant="h4">
-                      Student Pic
+                      Student Pic 
                     </Typography>
                     <TextField
                       sx={{ marginTop: "10px" }}

@@ -63,6 +63,22 @@ export default function StudentCardAdmin({
             <b>Age :</b>
             {student.age}
           </Typography>
+          {/* -------------------------------------------------------- */}
+          <Typography component={"div"} variant="h5">
+            <b>Address :</b>
+            {student.address}
+          </Typography>
+
+          <Typography component={"div"} variant="h5">
+            <b>Blood Group :</b>
+            {student.blood_group}
+          </Typography>
+
+          <Typography component={"div"} variant="h5">
+            <b>Date Of Birth :</b>
+            {student.dob}
+          </Typography>
+          {/* -------------------------------------------------- */}
           <Typography component={"div"} variant="h5">
             <b>Gender :</b>
             {student.gender}
