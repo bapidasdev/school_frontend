@@ -41,7 +41,7 @@ export default function StudentDetails() {
             borderRadius: "20px",
             overflow: "hidden",
             boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-            backgroundColor: "#fff",
+            
           }}
         >
           {/* Header with gradient */}
@@ -64,7 +64,7 @@ export default function StudentDetails() {
                 width: 100,
                 height: 100,
                 border: "4px solid white",
-                borderRadius: "15px",
+                borderRadius: "50%",
               }}
             />
             <Box>

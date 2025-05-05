@@ -1,20 +1,25 @@
 import {
   Box,
-  Card,
-  CardContent,
   Typography,
   Avatar,
   Grid,
-  Paper,
+  Card,
+  Button,
+  IconButton,
 } from "@mui/material";
 import {
   Cake as AgeIcon,
   Wc as GenderIcon,
   School as QualificationIcon,
+  Delete,
+  Edit,
 } from "@mui/icons-material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { baseUrl } from "../../../environment";
+
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
 export default function TeacherDetails() {
   const [teacher, setTeacher] = useState(null);
@@ -24,10 +29,9 @@ export default function TeacherDetails() {
       .get(`${baseUrl}/teacher/fetch-own`)
       .then((resp) => {
         setTeacher(resp.data.data);
-        console.log("Single Teacher Details from Teacher Details page", resp);
       })
       .catch((e) => {
-        console.log("Error in teacher", e);
+        console.error("Error fetching teacher:", e);
       });
   };
 
@@ -40,91 +44,113 @@ export default function TeacherDetails() {
       {teacher && (
         <Box
           sx={{
+            p: 2,
             display: "flex",
             justifyContent: "center",
             alignItems: "flex-start",
+            flexWrap: "wrap",
+            gap: 3,
+            backgroundColor: "#f5f5f5",
             minHeight: "100vh",
-            background: "#f8f9fa",
-            p: { xs: 2, sm: 4, md: 6 },
           }}
         >
           <Card
             sx={{
-              width: "100%",
-              maxWidth: 800,
+              width: 500,
               borderRadius: 5,
-              boxShadow: "0px 10px 30px rgba(0, 0, 0, 0.08)",
               overflow: "hidden",
-              backgroundColor: "#ffffff",
+              boxShadow: "0 8px 30px rgba(0,0,0,0.1)",
+              backgroundColor: "#fff",
             }}
           >
-            {/* Header Section */}
+            {/* Gradient Header */}
             <Box
               sx={{
-                display: "flex",
-                flexDirection: { xs: "column", sm: "row" },
-                alignItems: "center",
-                justifyContent: "space-between",
-                p: 3,
-                background: "linear-gradient(135deg, #fc466b 0%, #3f5efb 100%)",
+                background: "linear-gradient(90deg, #fc466b 0%, #3f5efb 100%)",
                 color: "#fff",
+                textAlign: "center",
+                py: 4,
+                borderTopLeftRadius: 20,
+                borderTopRightRadius: 20,
               }}
             >
-              <Box
+              <Avatar
+                src={
+                  teacher.teacher_image
+                    ? `/images/uploaded/teacher/${teacher.teacher_image}`
+                    : ""
+                }
+                alt={teacher.name}
                 sx={{
-                  width: 140,
-                  height: 160,
-                  backgroundColor: "#fff",
-                  borderRadius: "20px",
-                  overflow: "hidden",
-                  border: "4px solid #ffffff",
-                  boxShadow: "0 4px 15px rgba(0,0,0,0.2)",
+                  width: 80,
+                  height: 80,
+                  border: "3px solid white",
+                  margin: "0 auto 12px",
+                  fontSize: 28,
+                  bgcolor: "#fff",
+                  color: "#3f5efb",
                 }}
               >
-                <Avatar
-                  src={`/images/uploaded/teacher/${teacher.teacher_image}`}
-                  alt="Teacher"
-                  variant="square"
-                  sx={{ width: "100%", height: "100%" }}
-                />
-              </Box>
-              <Box sx={{ textAlign: { xs: "center", sm: "left" }, mt: { xs: 2, sm: 0 } }}>
-                <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                  {teacher.name}
-                </Typography>
-                <Typography variant="body2">{teacher.email}</Typography>
-              </Box>
+                {!teacher.teacher_image && teacher.name?.[0]?.toUpperCase()}
+              </Avatar>
+              <Typography variant="h6" fontWeight="bold">
+                {teacher.name}
+              </Typography>
+              <Typography variant="body2">{teacher.email}</Typography>
             </Box>
 
-            {/* Details Section */}
-            <CardContent sx={{ background: "#fafafa" }}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                  <InfoCard
-                    icon={<AgeIcon sx={{ color: "#3f5efb" }} />}
-                    label="Age"
-                    value={teacher.age}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <InfoCard
-                    icon={<GenderIcon sx={{ color: "#fc466b" }} />}
-                    label="Gender"
-                    value={teacher.gender}
-                  />
-                </Grid>
+            {/* Info Grid */}
+            <Box sx={{ px: 3, py: 3 }}>
+              <Grid container spacing={2}>
+                <InfoItem icon={<AgeIcon color="secondary" />} label="Age" value={teacher.age} />
+                <InfoItem icon={<GenderIcon sx={{ color: "#e91e63" }} />} label="Gender" value={teacher.gender} />
                 <Grid item xs={12}>
-                  <InfoCard
-                    icon={<QualificationIcon sx={{ color: "#00b894" }} />}
+                  <InfoItem
+                    icon={<QualificationIcon sx={{ color: "#4caf50" }} />}
                     label="Qualification"
                     value={teacher.qualification}
                   />
                 </Grid>
               </Grid>
+            </Box>
 
-             
-             
-            </CardContent>
+            {/* Action Buttons */}
+            {/* <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                px: 3,
+                pb: 3,
+                pt: 1,
+              }}
+            >
+              <Button
+                variant="contained"
+                sx={{
+                  background: "linear-gradient(135deg, #ff5c8a, #ff7eb3)",
+                  color: "#fff",
+                  px: 3,
+                  "&:hover": {
+                    background: "linear-gradient(135deg, #ff4170, #ff6ca0)",
+                  },
+                }}
+              >
+                <DeleteIcon />
+              </Button>
+              <Button
+                variant="contained"
+                sx={{
+                  background: "linear-gradient(135deg, #6a82fb, #fc5c7d)",
+                  color: "#fff",
+                  px: 3,
+                  "&:hover": {
+                    background: "linear-gradient(135deg, #5a6edc, #e94e6e)",
+                  },
+                }}
+              >
+                <EditIcon />
+              </Button>
+            </Box> */}
           </Card>
         </Box>
       )}
@@ -132,30 +158,21 @@ export default function TeacherDetails() {
   );
 }
 
-// Info Card component
-function InfoCard({ icon, label, value }) {
+// Info item subcomponent
+function InfoItem({ icon, label, value }) {
   return (
-    <Paper
-      elevation={2}
-      sx={{
-        p: 2,
-        display: "flex",
-        alignItems: "center",
-        borderRadius: 3,
-        backgroundColor: "#ffffff",
-        borderLeft: "6px solid #3f5efb",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
-      }}
-    >
-      <Box sx={{ mr: 2 }}>{icon}</Box>
-      <Box>
-        <Typography variant="subtitle2" color="textSecondary">
-          {label}
-        </Typography>
-        <Typography variant="body1" sx={{ fontWeight: 500 }}>
-          {value || "-"}
-        </Typography>
+    <Grid item xs={6}>
+      <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
+        <Box sx={{ mr: 1 }}>{icon}</Box>
+        <Box>
+          <Typography variant="subtitle2" color="textSecondary">
+            {label}:
+          </Typography>
+          <Typography variant="body2" fontWeight={500}>
+            {value || "-"}
+          </Typography>
+        </Box>
       </Box>
-    </Paper>
+    </Grid>
   );
 }

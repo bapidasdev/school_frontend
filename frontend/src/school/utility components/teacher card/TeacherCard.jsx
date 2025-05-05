@@ -1,94 +1,96 @@
-/* eslint-disable react/prop-types */
-
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  CardActions,
+  Avatar,
+  Typography,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { styled } from "@mui/material/styles";
-import Box from "@mui/material/Box";
-import Paper from "@mui/material/Paper";
-import { Button, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-
-const Item = styled(Paper)(({ theme }) => ({
-  backgroundColor: "transparent",
-  color: "#fff",
-  boxShadow: "none",
-  textTransform: "uppercase",
+const StyledCard = styled(Card)(({ theme }) => ({
+  maxWidth: 345,
+  margin: theme.spacing(2),
+  borderRadius: theme.spacing(2),
+  boxShadow: theme.shadows[3],
+  transition: "transform 0.3s, box-shadow 0.3s",
+  '&:hover': {
+    transform: "translateY(-5px)",
+    boxShadow: theme.shadows[6],
+  },
 }));
 
-export default function TeacherCardAdmin({
-  handleEdit,
-  teacher,
-  handleDelete,
-}) {
+const AnimatedButton = styled(Button)(({ theme }) => ({
+  transition: "background-color 0.3s, transform 0.3s",
+  '&:hover': {
+    transform: "scale(1.05)",
+  },
+}));
+
+export default function TeacherCardAdmin({ handleEdit, teacher, handleDelete }) {
   const convertDate = (dateData) => {
     const date = new Date(dateData);
     const dateNu = date.getDate();
-    const month = +date.getMonth() + 1;
+    const month = date.getMonth() + 1;
     const year = date.getFullYear();
-
-    return dateNu + "/" + month + "/" + year;
+    return `${dateNu}/${month}/${year}`;
   };
 
   return (
-    <Card sx={{ maxWidth: 345, margin: 2, borderRadius: 2, boxShadow: 3 }}>
-      <CardMedia
-        component="img"
-        alt={teacher.name}
-        image={`/images/uploaded/teacher/${teacher.teacher_image}`}
-        sx={{
-          borderRadius: "8px 8px 0 0",
-          objectFit: "cover", // This ensures the image covers the area without being distorted
-          height: "200px", // Fixed height
-        }}
+    <StyledCard>
+      <CardHeader
+        avatar={
+          <Avatar
+            src={`/images/uploaded/teacher/${teacher.teacher_image}`}
+            alt={teacher.name}
+            sx={{ width: 56, height: 56 }}
+          />
+        }
+        title={
+          <Typography variant="h6" component="div">
+            {teacher.name}
+          </Typography>
+        }
+        subheader={teacher.email}
       />
-      <CardContent sx={{ padding: 3 }}>
-        <Typography variant="h6" component="div" sx={{ fontWeight: "bold" }}>
-          <b>Name :</b> <span>{teacher.name}</span>
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-          <b>Email :</b> {teacher.email}
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-          <b>Age :</b> {teacher.age}
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-          <b>Gender :</b> {teacher.gender}
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-          <b>Qualification:</b> {teacher.qualification}
-        </Typography>
-        <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-          <b>Date of Join:</b> <span>{convertDate(teacher.createdAt)}</span>
-        </Typography>
+      <CardContent>
+        <List dense>
+          <ListItem>
+            <ListItemText primary="Age" secondary={teacher.age} />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary="Gender" secondary={teacher.gender} />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary="Qualification" secondary={teacher.qualification} />
+          </ListItem>
+          <ListItem>
+            <ListItemText primary="Date of Join" secondary={convertDate(teacher.createdAt)} />
+          </ListItem>
+        </List>
       </CardContent>
-      <CardActions sx={{ display: "flex", justifyContent: "space-between", padding: "16px" }}>
-        <Button
+      <CardActions sx={{ justifyContent: "space-between", padding: 2 }}>
+        <AnimatedButton
           size="small"
           variant="contained"
           color="error"
-          sx={{ width: "45%" }}
-          onClick={() => {
-            handleDelete(teacher._id);
-          }}
+          onClick={() => handleDelete(teacher._id)}
         >
           Delete
-        </Button>
-        <Button
+        </AnimatedButton>
+        <AnimatedButton
           size="small"
           variant="contained"
           color="warning"
-          sx={{ width: "45%" }}
-          onClick={() => {
-            handleEdit(teacher._id);
-          }}
+          onClick={() => handleEdit(teacher._id)}
         >
           Edit
-        </Button>
+        </AnimatedButton>
       </CardActions>
-    </Card>
+    </StyledCard>
   );
 }

@@ -10,6 +10,7 @@ import {
   Select,
   TextField,
   Typography,
+  CircularProgress,
 } from "@mui/material";
 import { useFormik } from "formik";
 import axios from "axios";
@@ -18,10 +19,6 @@ import CustomizedSnackbars from "../../../basic utility components/CustomizedSna
 import { studentSchema } from "../../../yupSchema/studentSchema";
 import StudentCardAdmin from "../../utility components/student card/StudentCard";
 
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-
 export default function Students() {
   const [studentClass, setStudentClass] = useState([]);
   const [students, setStudents] = useState([]);
@@ -29,7 +26,7 @@ export default function Students() {
   const [editId, setEditId] = useState(null);
 
   const [file, setFile] = useState(null);
-  const [imageUrl, setImageUrl] = useState(null); // Independent state for image preview
+  const [imageUrl, setImageUrl] = useState(null);
 
   // Handle image file selection
   const addImage = (event) => {
@@ -69,16 +66,8 @@ export default function Students() {
         });
     }
   };
-  const bloodGroups = [
-    "A+",
-    "A-",
-    "B+",
-    "B-",
-    "AB+",
-    "AB-",
-    "O+",
-    "O-"
-  ]
+
+  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   const handleEdit = (id) => {
     setEdit(true);
@@ -99,7 +88,7 @@ export default function Students() {
           guardian_phone: data.guardian_phone,
           password: data.password,
         });
-        setImageUrl(data.image); // Assuming response has `image` URL field for preview
+        setImageUrl(data.image); 
         setEditId(data._id);
       })
       .catch(() => console.log("Error in fetching edit data."));
@@ -200,15 +189,15 @@ export default function Students() {
     fetchStudentClass();
   }, [message, params]);
 
-  //   CLEARING IMAGE FILE REFENCE FROM INPUT
   const fileInputRef = useRef(null);
   const handleClearFile = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // Clear the file input
+      fileInputRef.current.value = ""; 
     }
-    setFile(null); // Reset the file state
-    setImageUrl(null); // Clear the image preview
+    setFile(null); 
+    setImageUrl(null);
   };
+
   return (
     <>
       {message && (
@@ -219,10 +208,6 @@ export default function Students() {
         />
       )}
       <Box sx={{ padding: "40px 10px 20px 10px" }}>
-        <Box sx={{ display: "flex", justifyContent: "center" }} component="div">
-          <Typography variant="h2">Students</Typography>
-        </Box>
-
         <Box sx={{ padding: "40px" }}>
           <Paper sx={{ padding: "20px", margin: "10px" }}>
             <Typography
@@ -250,14 +235,13 @@ export default function Students() {
                 </Typography>
                 <TextField
                   sx={{ marginTop: "10px" }}
-                  id="filled-basic"
+                  id="file"
                   variant="outlined"
                   name="file"
                   type="file"
                   onChange={addImage}
                   inputRef={fileInputRef}
                 />
-
                 {imageUrl && (
                   <Box sx={{ position: "relative" }}>
                     <CardMedia
@@ -268,12 +252,12 @@ export default function Students() {
                   </Box>
                 )}
               </Box>
+
               {/* Other input fields go here */}
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
-                label="email "
+                label="Email"
                 variant="outlined"
                 name="email"
                 value={Formik.values.email}
@@ -289,8 +273,7 @@ export default function Students() {
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
-                label="name "
+                label="Name"
                 variant="outlined"
                 name="name"
                 value={Formik.values.name}
@@ -303,11 +286,9 @@ export default function Students() {
                 </p>
               )}
 
-              <FormControl sx={{ minWidth: "220px", marginTop: "10px" }}>
-                <InputLabel id="demo-simple-select-label">Class</InputLabel>
+              <FormControl sx={{ minWidth: "240px", marginTop: "10px" }}>
+                <InputLabel>Class</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
                   label="Class"
                   name="student_class"
                   onChange={Formik.handleChange}
@@ -315,37 +296,33 @@ export default function Students() {
                   value={Formik.values.student_class}
                 >
                   {studentClass &&
-                    studentClass.map((value, i) => {
-                      return (
-                        <MenuItem key={i} value={value._id}>
-                          {value.class_text}
-                        </MenuItem>
-                      );
-                    })}
+                    studentClass.map((value, i) => (
+                      <MenuItem key={i} value={value._id}>
+                        {value.class_text}
+                      </MenuItem>
+                    ))}
                 </Select>
               </FormControl>
+
               {Formik.touched.student_class && Formik.errors.student_class && (
                 <p style={{ color: "red", textTransform: "capitalize" }}>
                   {Formik.errors.student_class}
                 </p>
               )}
 
-              <br />
-              <FormControl sx={{ minWidth: "220px", marginTop: "10px" }}>
-                <InputLabel id="demo-simple-select-label">Gender</InputLabel>
+              <FormControl sx={{ minWidth: "240px", marginTop: "10px" }}>
+                <InputLabel>Gender</InputLabel>
                 <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
                   label="Gender"
                   name="gender"
                   onChange={Formik.handleChange}
                   onBlur={Formik.handleBlur}
                   value={Formik.values.gender}
                 >
-                  <MenuItem value={""}>Select Gender</MenuItem>
-                  <MenuItem value={"male"}>Male</MenuItem>
-                  <MenuItem value={"female"}>Female</MenuItem>
-                  <MenuItem value={"other"}>Other</MenuItem>
+                  <MenuItem value="">Select Gender</MenuItem>
+                  <MenuItem value="male">Male</MenuItem>
+                  <MenuItem value="female">Female</MenuItem>
+                  <MenuItem value="other">Other</MenuItem>
                 </Select>
               </FormControl>
               {Formik.touched.gender && Formik.errors.gender && (
@@ -357,8 +334,7 @@ export default function Students() {
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
-                label="Age "
+                label="Age"
                 variant="outlined"
                 name="age"
                 value={Formik.values.age}
@@ -370,11 +346,10 @@ export default function Students() {
                   {Formik.errors.age}
                 </p>
               )}
-              {/* ------------------------------------------------------------------------------------------------- */}
+
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
                 label="Address"
                 variant="outlined"
                 name="address"
@@ -391,8 +366,7 @@ export default function Students() {
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
-                label="Date Of Birth"
+                label="Date of Birth"
                 variant="outlined"
                 name="dob"
                 value={Formik.values.dob}
@@ -405,38 +379,10 @@ export default function Students() {
                 </p>
               )}
 
-              {/* <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <DatePicker
-                  label="Date of Birth"
-                  value={Formik.values.dob}
-                  onChange={(newValue) => {
-                    Formik.setFieldValue("dob", newValue);
-                  }}
-                  onBlur={Formik.handleBlur}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      fullWidth
-                      sx={{ marginTop: "10px" }}
-                      name="dob"
-                    />
-                  )}
-                />
-              </LocalizationProvider>
-
-              {Formik.touched.dob && Formik.errors.dob && (
-                <p style={{ color: "red", textTransform: "capitalize" }}>
-                  {Formik.errors.dob}
-                </p>
-              )} */}
-
-
-
               <TextField
                 fullWidth
                 select
                 sx={{ marginTop: "10px" }}
-                id="blood-group"
                 label="Blood Group"
                 variant="outlined"
                 name="blood_group"
@@ -457,14 +403,10 @@ export default function Students() {
                 </p>
               )}
 
-
-              {/* ------------------------------------------------------------------------------------------------- */}
-
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
-                label="Guardian "
+                label="Guardian"
                 variant="outlined"
                 name="guardian"
                 value={Formik.values.guardian}
@@ -477,50 +419,39 @@ export default function Students() {
                 </p>
               )}
 
-
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="guardian-phone"
                 label="Guardian Phone"
                 variant="outlined"
                 name="guardian_phone"
-                type="number" // only allows numeric input
                 value={Formik.values.guardian_phone}
                 onChange={Formik.handleChange}
                 onBlur={Formik.handleBlur}
-                inputProps={{
-                  inputMode: 'numeric',
-                  pattern: '[0-9]*',
-                }}
               />
-
               {Formik.touched.guardian_phone && Formik.errors.guardian_phone && (
                 <p style={{ color: "red", textTransform: "capitalize" }}>
                   {Formik.errors.guardian_phone}
                 </p>
               )}
 
-
               {!isEdit && (
-                <>
-                  <TextField
-                    fullWidth
-                    sx={{ marginTop: "10px" }}
-                    id="filled-basic"
-                    label="Password "
-                    variant="outlined"
-                    name="password"
-                    value={Formik.values.password}
-                    onChange={Formik.handleChange}
-                    onBlur={Formik.handleBlur}
-                  />
-                  {Formik.touched.password && Formik.errors.password && (
-                    <p style={{ color: "red", textTransform: "capitalize" }}>
-                      {Formik.errors.password}
-                    </p>
-                  )}
-                </>
+                <TextField
+                  fullWidth
+                  sx={{ marginTop: "10px" }}
+                  label="Password"
+                  variant="outlined"
+                  name="password"
+                  value={Formik.values.password}
+                  onChange={Formik.handleChange}
+                  onBlur={Formik.handleBlur}
+                />
+              )}
+
+              {Formik.touched.password && Formik.errors.password && (
+                <p style={{ color: "red", textTransform: "capitalize" }}>
+                  {Formik.errors.password}
+                </p>
               )}
 
               <Button
@@ -529,8 +460,13 @@ export default function Students() {
                 variant="contained"
                 color="primary"
                 sx={{ marginTop: "10px" }}
+                disabled={Formik.isSubmitting}
               >
-                {isEdit ? "Update Student" : "Register Student"}
+                {Formik.isSubmitting ? (
+                  <CircularProgress size={24} sx={{ color: "white" }} />
+                ) : (
+                  isEdit ? "Update Student" : "Register Student"
+                )}
               </Button>
               {isEdit && (
                 <Button
@@ -547,15 +483,20 @@ export default function Students() {
         </Box>
 
         <Box sx={{ padding: "40px", display: "flex", flexWrap: "wrap" }}>
-          {students.length > 0 &&
-            students.map((value, i) => (
+          {students.length > 0 ? (
+            students.map((student, index) => (
               <StudentCardAdmin
-                key={i}
-                student={value}
-                handleDelete={handleDelete}
+                key={index}
+                student={student}
                 handleEdit={handleEdit}
+                handleDelete={handleDelete}
               />
-            ))}
+            ))
+          ) : (
+            <Typography variant="h6" sx={{ width: "100%" }}>
+              No students found.
+            </Typography>
+          )}
         </Box>
       </Box>
     </>

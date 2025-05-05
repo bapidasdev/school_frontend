@@ -162,7 +162,7 @@ export default function School() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                    RC Academy
+                    RC Academy 
                     </Typography>
                 </Toolbar>
             </AppBar>

@@ -33,7 +33,17 @@ import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import ExplicitIcon from '@mui/icons-material/Explicit';
 import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { Avatar } from '@mui/material';
+import axios from 'axios';
+import { baseUrl } from '../environment';
+import { useEffect } from 'react';
+import { useState } from 'react';
 const drawerWidth = 240;
+
+
+
+
+
 
 const openedMixin = (theme) => ({
     width: drawerWidth,
@@ -117,8 +127,26 @@ export default function Teacher() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
+    // --------------------------------------------------------------------------------------------
+    const [teacher, setTeacher] = useState(null);
+
+    const getTeacherDetails = () => {
+        axios
+            .get(`${baseUrl}/teacher/fetch-own`)
+            .then((resp) => {
+                setTeacher(resp.data.data);
+            })
+            .catch((e) => {
+                console.error("Error fetching teacher:", e);
+            });
+    };
+
+    useEffect(() => {
+        getTeacherDetails();
+    }, []);
+    // --------------------------------------------------------------------------------------------
     const navArr = [
-        {link:"/", component:"Home", icon:HomeIcon},
+        { link: "/", component: "Home", icon: HomeIcon },
         { link: "/teacher/details", component: "Details", icon: TheatersIcon },
         // { link: "/teacher/teachers", component: "Teachers", icon: GroupIcon },
         // { link: "/teacher/application", component: "Application", icon: GradingIcon }
@@ -128,9 +156,9 @@ export default function Teacher() {
         // { link: "/teacher/teachers", component: "Teachers", icon: GroupIcon },
         { link: "/teacher/periods", component: "Periods", icon: CalendarMonthIcon },
         { link: "/teacher/attendance", component: "Attendance", icon: RecentActorsIcon },
-        { link: "/teacher/examinations", component: "Examinations", icon: ExplicitIcon},
-        {link:"/teacher/notice", component:"Notice", icon:CircleNotificationsIcon},
-        {link:"/logout", component:"Log Out", icon: LogoutIcon}
+        { link: "/teacher/examinations", component: "Examinations", icon: ExplicitIcon },
+        { link: "/teacher/notice", component: "Notice", icon: CircleNotificationsIcon },
+        { link: "/logout", component: "Log Out", icon: LogoutIcon }
     ]
     const navigate = useNavigate();
     const handleNavigation = (link) => {
@@ -147,7 +175,7 @@ export default function Teacher() {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar  position="fixed" open={open}>
+            <AppBar position="fixed" open={open}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -163,9 +191,50 @@ export default function Teacher() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                    RC Academy
-                    </Typography>
+
+                    <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography variant="h6" noWrap component="div">
+                            RC Academy
+                        </Typography>
+                        {/* // -------------------------------------------------------------------------------------------- */}
+                        <Typography style={{ marginRight: "35px" }} variant="h6" noWrap component="div">
+                            {teacher && (<Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    padding: "5px",
+                                    gap: 3,
+                                    flexWrap: "wrap",
+                                    justifyContent: "center",
+                                }}
+                            >
+                                <Avatar
+                                    src={
+                                        teacher.teacher_image
+                                            ? `/images/uploaded/teacher/${teacher.teacher_image}`
+                                            : ""
+                                    }
+                                    alt={teacher.name}
+                                    sx={{
+                                        width: 50,
+                                        height: 50,
+                                        border: "4px solid white",
+                                        borderRadius: "50%",
+                                    }}
+                                >
+                                    {!teacher.teacher_image && teacher.name?.[0]?.toUpperCase()}
+                                </Avatar>
+                                <Typography variant="h6" fontWeight="bold">
+                                    {teacher.name}
+                                </Typography>
+
+                            </Box>
+                            )}
+                             {/* // -------------------------------------------------------------------------------------------- */}
+                        </Typography>
+                    </Box>
+
+
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
@@ -175,7 +244,7 @@ export default function Teacher() {
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <List sx={{height:"100%"}}>
+                <List sx={{ height: "100%" }}>
                     {navArr && navArr.map((navItem, index) => (
                         <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
@@ -231,7 +300,7 @@ export default function Teacher() {
                 <Divider />
 
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1 }}>
+            <Box component="main" sx={{ flexGrow: 1 }} style={{marginTop:"15px"}}>
                 <DrawerHeader />
                 <Outlet />
             </Box>

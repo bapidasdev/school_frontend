@@ -106,7 +106,7 @@ export default function Students() {
       setImageUrl(null);
     }
   };
-  
+
 
   //   MESSAGE
   const [message, setMessage] = useState("");
@@ -120,8 +120,8 @@ export default function Students() {
     name: "",
     email: "",
     student_class: "",
-    gender:"",
-    age:"",
+    gender: "",
+    age: "",
     guardian: "",
     guardian_phone: "",
     student_image: "",
@@ -135,8 +135,8 @@ export default function Students() {
       if (isEdit) {
         // Edit functionality
         axios.patch(`${baseUrl}/student/update/${editId}`, {
-            ...values,
-          })
+          ...values,
+        })
           .then((resp) => {
             setMessage(resp.data.message);
             setType("success");
@@ -181,21 +181,21 @@ export default function Students() {
         }
       }
     },
-    
+
   });
 
-  
+
 
   const fetchStudentClass = () => {
     axios
-    .get(`${baseUrl}/class/fetch-all`)
-    .then((resp) => {
-      setStudentClass(resp.data.data)
-    console.log("Class",resp.data)
-    })
-    .catch((e) => {
-      console.log("Error in fetching student Class", e);
-    });
+      .get(`${baseUrl}/class/fetch-all`)
+      .then((resp) => {
+        setStudentClass(resp.data.data)
+        console.log("Class", resp.data)
+      })
+      .catch((e) => {
+        console.log("Error in fetching student Class", e);
+      });
   };
 
   const fetchStudents = () => {
@@ -252,7 +252,7 @@ export default function Students() {
                 variant="h4"
                 sx={{ fontWeight: "800", textAlign: "center" }}
               >
-                Add New Student
+                Add New Student 
               </Typography>
             )}{" "}
             <Box
@@ -359,7 +359,7 @@ export default function Students() {
               )}
 
 
-<br/>
+              <br />
               <FormControl sx={{ minWidth: "220px", marginTop: "10px" }}>
                 <InputLabel id="demo-simple-select-label">Gender</InputLabel>
                 <Select
@@ -384,7 +384,7 @@ export default function Students() {
               )}
 
 
-<TextField
+              <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
                 id="filled-basic"
@@ -437,25 +437,25 @@ export default function Students() {
                   </p>
                 )}
 
-                {!isEdit && <>
-                
-              <TextField
-                fullWidth
-                sx={{ marginTop: "10px" }}
-                id="filled-basic"
-                label="Password "
-                variant="outlined"
-                name="password"
-                value={Formik.values.password}
-                onChange={Formik.handleChange}
-                onBlur={Formik.handleBlur}
-              />
-              {Formik.touched.password && Formik.errors.password && (
-                <p style={{ color: "red", textTransform: "capitalize" }}>
-                  {Formik.errors.password}
-                </p>
-              )}
-                </>}
+              {!isEdit && <>
+
+                <TextField
+                  fullWidth
+                  sx={{ marginTop: "10px" }}
+                  id="filled-basic"
+                  label="Password "
+                  variant="outlined"
+                  name="password"
+                  value={Formik.values.password}
+                  onChange={Formik.handleChange}
+                  onBlur={Formik.handleBlur}
+                />
+                {Formik.touched.password && Formik.errors.password && (
+                  <p style={{ color: "red", textTransform: "capitalize" }}>
+                    {Formik.errors.password}
+                  </p>
+                )}
+              </>}
 
 
               <Box sx={{ marginTop: "10px" }} component={"div"}>
@@ -522,7 +522,7 @@ export default function Students() {
           />
         </Box>
 
-        <Box sx={{display:"flex",  flexDirection:"row", flexWrap:"wrap", justifyContent:"space-between"}}>
+        <Box sx={{ display: "flex", flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
           {students &&
             students.map((student, i) => {
               return (

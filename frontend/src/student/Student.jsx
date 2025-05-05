@@ -26,10 +26,13 @@ import GroupIcon from '@mui/icons-material/Group';
 import TheatersIcon from '@mui/icons-material/Theaters';
 import GradingIcon from '@mui/icons-material/Grading';
 import HomeIcon from '@mui/icons-material/Home';
- import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
+import CircleNotificationsIcon from '@mui/icons-material/CircleNotifications';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import ExplicitIcon from '@mui/icons-material/Explicit';
 import LogoutIcon from '@mui/icons-material/Logout';
+import axios from 'axios';
+import { Avatar } from '@mui/material';
+import { baseUrl } from '../environment';
 const drawerWidth = 240;
 
 const openedMixin = (theme) => ({
@@ -114,17 +117,39 @@ export default function Student() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
+
+
+    // ---------------------------------------------------------------------------------------------
+    const [student, setStudent] = React.useState(null);
+
+    const getStudentDetails = () => {
+        axios
+            .get(`${baseUrl}/student/fetch-own`)
+            .then((resp) => {
+                setStudent(resp.data.data);
+            })
+            .catch((e) => {
+                console.log("Error in student", e);
+            });
+    };
+
+    React.useEffect(() => {
+        getStudentDetails();
+    }, []);
+
+    // --------------------------------------------------------------------------------------------
+
     const navArr = [
         // {link:"/", component:"Home", icon:HomeIcon},
         // { link: "/student", component: "Dashboard", icon: DashboardIcon },
         { link: "/student/student-details", component: "Your Details", icon: DashboardIcon },
         { link: "/student/periods", component: "Periods", icon: CalendarMonthIcon },
-        { link: "/student/attendance", component: "Attendance", icon:GradingIcon },
+        { link: "/student/attendance", component: "Attendance", icon: GradingIcon },
         { link: "/student/examinations", component: "Examination", icon: ExplicitIcon },
-        {link:"/student/notice", component:"Notice", icon:CircleNotificationsIcon},
-        {link:"/logout", component:"Log Out", icon: LogoutIcon}
+        { link: "/student/notice", component: "Notice", icon: CircleNotificationsIcon },
+        { link: "/logout", component: "Log Out", icon: LogoutIcon }
     ]
-   
+
     const navigate = useNavigate();
     const handleNavigation = (link) => {
         navigate(link)
@@ -140,7 +165,8 @@ export default function Student() {
     return (
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
-            <AppBar  position="fixed" open={open}>
+
+            {/* <AppBar  position="fixed" open={open}>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -157,13 +183,90 @@ export default function Student() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" noWrap component="div">
-                    R.C. Academy
+                    R.C. Academy 
                     </Typography>
 
-                  
+                    <Typography variant="h6" noWrap component="div">
+                    R.C. Academy 
+                    </Typography>
                 </Toolbar>
-            
+            </AppBar> */}
+
+            <AppBar position="fixed" open={open}>
+                <Toolbar>
+                    <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        edge="start"
+                        sx={[
+                            {
+                                marginRight: 5,
+                            },
+                            open && { display: 'none' },
+                        ]}
+                    >
+                        <MenuIcon />
+                    </IconButton>
+
+                    <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Typography variant="h6" noWrap component="div">
+                            R.C. Academy 
+                        </Typography>
+
+                        {/* --------------------------------------------------------------------------------- */}
+
+                        <Typography style={{marginRight:"35px"}}  variant="h6" noWrap component="div">
+                            {student && (
+                                <Box
+                                    sx={{
+                                        maxWidth: 400,
+                                        margin: "10px auto",
+                                        borderRadius: "10px",
+                                        overflow: "hidden",
+                                    }}
+                                >
+                                    {/* Header with gradient */}
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            padding: "5px",
+                                            gap: 3,
+                                            flexWrap: "wrap",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                                        <Avatar
+                                            src={`/images/uploaded/student/${student.student_image}`}
+                                            alt="Student"
+                                            sx={{
+                                                width: 50,
+                                                height: 50,
+                                                border: "4px solid white",
+                                                borderRadius: "50%",
+                                            }}
+                                        />
+                                        <Box>
+                                            <Typography variant="h5" fontWeight={700}>
+                                                {student.name}
+                                            </Typography>
+
+                                        </Box>
+                                    </Box>
+                                </Box>)}
+                        </Typography>
+
+
+                        {/* --------------------------------------------------------------------------------- */}
+                    </Box>
+                </Toolbar>
             </AppBar>
+
+
+
+
+
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader >
                     <IconButton onClick={handleDrawerClose}>
@@ -171,7 +274,7 @@ export default function Student() {
                     </IconButton>
                 </DrawerHeader>
                 <Divider />
-                <List sx={{height:"100%"}}>
+                <List sx={{ height: "100%" }}>
                     {navArr && navArr.map((navItem, index) => (
                         <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
@@ -189,7 +292,7 @@ export default function Student() {
                                         },
                                 ]}
 
-                                
+
                                 onClick={() => { handleNavigation(navItem.link) }}
                             >
                                 <ListItemIcon
@@ -228,7 +331,7 @@ export default function Student() {
                 <Divider />
 
             </Drawer>
-            <Box component="main" sx={{ flexGrow: 1 }}>
+            <Box component="main" sx={{ flexGrow: 1 }} style={{marginTop:"25px"}}>
                 <DrawerHeader />
                 <Outlet />
             </Box>

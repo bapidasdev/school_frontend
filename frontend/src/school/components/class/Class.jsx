@@ -38,9 +38,9 @@ export default function Class() {
   const [editId, setEditId] = useState(null);
 
 
- 
 
-  
+
+
 
   const handleDelete = (id) => {
     if (confirm("Are you sure you want to delete?")) {
@@ -87,7 +87,7 @@ export default function Class() {
 
   const initialValues = {
     class_num: "",
-    class_text:""
+    class_text: ""
   };
   const Formik = useFormik({
     initialValues: initialValues,
@@ -111,21 +111,21 @@ export default function Class() {
             console.log("Error, edit casting submit", e);
           });
       } else {
-      
-          axios
-            .post(`${baseUrl}/class/create`,{...values})
-            .then((resp) => {
-              console.log("Response after submitting admin casting", resp);
-              setMessage(resp.data.message);
-              setType("success");
-            })
-            .catch((e) => {
-              setMessage(e.response.data.message);
-              setType("error");
-              console.log("Error, response admin casting calls", e);
-            });
-          Formik.resetForm();
-        
+
+        axios
+          .post(`${baseUrl}/class/create`, { ...values })
+          .then((resp) => {
+            console.log("Response after submitting admin casting", resp);
+            setMessage(resp.data.message);
+            setType("success");
+          })
+          .catch((e) => {
+            setMessage(e.response.data.message);
+            setType("error");
+            console.log("Error, response admin casting calls", e);
+          });
+        Formik.resetForm();
+
       }
     },
   });
@@ -208,7 +208,7 @@ export default function Class() {
               autoComplete="off"
               onSubmit={Formik.handleSubmit}
             >
-              
+
 
               <TextField
                 fullWidth
@@ -245,8 +245,8 @@ export default function Class() {
                 </p>
               )}
 
-           
-         
+
+
 
 
 
@@ -274,29 +274,29 @@ export default function Class() {
           </Paper>
         </Box>
 
-      
+
 
         <Box>
-     
-          {studentClass.map((value,i) => (
 
-<Paper key={value._id} sx={{ p: 2, m: 2, display: "inline-block",}}>
-<Box>
-  <Typography variant="h4">Class :{value.class_text} [{value.class_num}]</Typography>
-  <Typography variant="h4">{value.message}</Typography>
+          {studentClass.map((value, i) => (
 
-</Box>
-<Box component={'div'} sx={{width:'80%', margin:"auto"}}>
-  <IconButton onClick={() => handleEdit(value._id)} color="primary">
-    <EditIcon />
-  </IconButton>
-  <IconButton onClick={() => handleDelete(value._id)} color="secondary">
-    <DeleteIcon />
-  </IconButton>
-</Box>
-</Paper>
+            <Paper key={value._id} sx={{ p: 2, m: 2, display: "inline-block", }}>
+              <Box>
+                <Typography variant="h4">Class :{value.class_text} [{value.class_num}]</Typography>
+                <Typography variant="h4">{value.message}</Typography>
+
+              </Box>
+              <Box component={'div'} sx={{ width: '80%', margin: "auto" }}>
+                <IconButton onClick={() => handleEdit(value._id)} color="primary">
+                  <EditIcon />
+                </IconButton>
+                <IconButton onClick={() => handleDelete(value._id)} color="secondary">
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            </Paper>
           ))}
-     
+
 
         </Box>
       </Box>

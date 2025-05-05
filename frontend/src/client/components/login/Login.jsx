@@ -21,7 +21,8 @@ import LockIcon from "@mui/icons-material/Lock";
 import { AuthContext } from "../../../context/AuthContext";
 import CustomizedSnackbars from "../../../basic utility components/CustomizedSnackbars";
 
-import bg from "../../../assets/background_img.jpg"
+import bg from "../../../assets/background_img.jpg";
+import login_img from '../../../assets/graduation-cap.png'
 
 export default function Login() {
     const { authenticated, login } = useContext(AuthContext);
@@ -86,7 +87,7 @@ export default function Login() {
             sx={{
                 height: "100vh",
                 width: "100vw",
-                backgroundImage:`url(${bg})`,
+                backgroundImage: `url(${bg})`,
                 backgroundSize: "cover",
                 backgroundPosition: "center",
                 display: "flex",
@@ -135,7 +136,7 @@ export default function Login() {
                 {/* Logo */}
                 <Box sx={{ mb: 4 }}>
                     <img
-                        src="https://img.icons8.com/ios-filled/100/ffffff/graduation-cap.png"
+                        src={login_img}
                         alt="login"
                         width={70}
                         height={70}
@@ -158,7 +159,7 @@ export default function Login() {
                         >
                             User Type
                         </InputLabel>
-                        
+
                         <Select
                             labelId="user-type-label"
                             id="user-type"
