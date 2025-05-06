@@ -1,6 +1,7 @@
 import {
     Box,
     Button,
+    CircularProgress,
     FormControl,
     InputAdornment,
     InputLabel,
@@ -29,6 +30,7 @@ export default function Login() {
     const [loginType, setLoginType] = useState("student");
     const [message, setMessage] = useState("");
     const [type, setType] = useState("success");
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const resetMessage = () => setMessage("");
@@ -49,6 +51,7 @@ export default function Login() {
         initialValues,
         validationSchema: loginSchema,
         onSubmit: (values) => {
+            setIsLoading(true);
             let url;
             let navUrl;
             if (loginType === "school_owner") {
@@ -78,7 +81,8 @@ export default function Login() {
                 .catch((e) => {
                     setMessage(e.response.data.message);
                     setType("error");
-                });
+                })
+                .finally(() => setIsLoading(false));
         },
     });
 
@@ -98,7 +102,6 @@ export default function Login() {
                 boxSizing: "border-box",
             }}
         >
-            {/* Dark overlay */}
             <Box
                 sx={{
                     position: "absolute",
@@ -133,7 +136,6 @@ export default function Login() {
                     textAlign: "center",
                 }}
             >
-                {/* Logo */}
                 <Box sx={{ mb: 4 }}>
                     <img
                         src={login_img}
@@ -144,10 +146,8 @@ export default function Login() {
                     />
                 </Box>
 
-                {/* Form */}
                 <Box component="form" onSubmit={Formik.handleSubmit} noValidate>
                     <FormControl fullWidth sx={{ marginBottom: 2 }}>
-
                         <InputLabel
                             id="user-type-label"
                             sx={{
@@ -194,7 +194,6 @@ export default function Login() {
                             <MenuItem value="school_owner">School Owner</MenuItem>
                         </Select>
                     </FormControl>
-
 
                     <TextField
                         fullWidth
@@ -265,6 +264,7 @@ export default function Login() {
                         type="submit"
                         variant="contained"
                         fullWidth
+                        disabled={isLoading}
                         sx={{
                             backgroundColor: "#fff",
                             color: "black",
@@ -277,11 +277,14 @@ export default function Login() {
                             "&:hover": {
                                 backgroundColor: "black",
                                 color: '#fff'
-
                             },
                         }}
                     >
-                        LOGIN
+                        {isLoading ? (
+                            <CircularProgress size={24} sx={{ color: "black" }} />
+                        ) : (
+                            "LOGIN"
+                        )}
                     </Button>
                 </Box>
             </Paper>

@@ -17,6 +17,7 @@ import {
   Table,
   TableContainer,
   IconButton,
+  CircularProgress, // <- loader
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -36,11 +37,7 @@ export default function Class() {
   const [studentClass, setStudentClass] = useState([]);
   const [isEdit, setEdit] = useState(false);
   const [editId, setEditId] = useState(null);
-
-
-
-
-
+  const [isSubmitting, setIsSubmitting] = useState(false); // <- loader state
 
   const handleDelete = (id) => {
     if (confirm("Are you sure you want to delete?")) {
@@ -57,14 +54,15 @@ export default function Class() {
         });
     }
   };
+
   const handleEdit = (id) => {
     console.log("Handle  Edit is called", id);
     setEdit(true);
     axios
       .get(`${baseUrl}/class/fetch-single/${id}`)
       .then((resp) => {
-        Formik.setFieldValue("class_num", resp.data.data.class_num);
-        Formik.setFieldValue("class_text", resp.data.data.class_text);
+        formik.setFieldValue("class_num", resp.data.data.class_num);
+        formik.setFieldValue("class_text", resp.data.data.class_text);
         setEditId(resp.data.data._id);
       })
       .catch((e) => {
@@ -74,12 +72,11 @@ export default function Class() {
 
   const cancelEdit = () => {
     setEdit(false);
-    Formik.resetForm()
+    formik.resetForm();
   };
 
-  //   MESSAGE
   const [message, setMessage] = useState("");
-  const [type, setType] = useState("succeess");
+  const [type, setType] = useState("success"); // fixed typo
 
   const resetMessage = () => {
     setMessage("");
@@ -89,77 +86,60 @@ export default function Class() {
     class_num: "",
     class_text: ""
   };
-  const Formik = useFormik({
+
+  const formik = useFormik({
     initialValues: initialValues,
     validationSchema: classSchema,
     onSubmit: (values) => {
-      if (isEdit) {
-        console.log("edit id", editId);
-        axios
-          .patch(`${baseUrl}/class/update/${editId}`, {
-            ...values,
-          })
-          .then((resp) => {
-            console.log("Edit submit", resp);
-            setMessage(resp.data.message);
-            setType("success");
+      setIsSubmitting(true);
+      const apiCall = isEdit
+        ? axios.patch(`${baseUrl}/class/update/${editId}`, values)
+        : axios.post(`${baseUrl}/class/create`, values);
+
+      apiCall
+        .then((resp) => {
+          setMessage(resp.data.message);
+          setType("success");
+          if (isEdit) {
             cancelEdit();
-          })
-          .catch((e) => {
-            setMessage(e.response.data.message);
-            setType("error");
-            console.log("Error, edit casting submit", e);
-          });
-      } else {
-
-        axios
-          .post(`${baseUrl}/class/create`, { ...values })
-          .then((resp) => {
-            console.log("Response after submitting admin casting", resp);
-            setMessage(resp.data.message);
-            setType("success");
-          })
-          .catch((e) => {
-            setMessage(e.response.data.message);
-            setType("error");
-            console.log("Error, response admin casting calls", e);
-          });
-        Formik.resetForm();
-
-      }
+          } else {
+            formik.resetForm();
+          }
+          fetchstudentsClass();
+        })
+        .catch((e) => {
+          setMessage(e.response?.data?.message || "Something went wrong");
+          setType("error");
+          console.log("Submission error:", e);
+        })
+        .finally(() => {
+          setIsSubmitting(false);
+        });
     },
   });
 
   const [month, setMonth] = useState([]);
   const [year, setYear] = useState([]);
   const fetchStudentClass = () => {
-    // axios
-    //   .get(`${baseUrl}/casting/get-month-year`)
-    //   .then((resp) => {
-    //     console.log("Fetching month and year.", resp);
-    //     setMonth(resp.data.month);
-    //     setYear(resp.data.year);
-    //   })
-    //   .catch((e) => {
-    //     console.log("Error in fetching month and year", e);
-    //   });
+    // Placeholder
   };
 
   const fetchstudentsClass = () => {
     axios
       .get(`${baseUrl}/class/fetch-all`)
       .then((resp) => {
-        console.log("Fetching data in  Casting Calls  admin.", resp);
         setStudentClass(resp.data.data);
       })
       .catch((e) => {
         console.log("Error in fetching casting calls admin data", e);
       });
   };
+
   useEffect(() => {
     fetchstudentsClass();
     fetchStudentClass();
   }, [message]);
+
   return (
     <>
       {message && (
@@ -169,9 +149,7 @@ export default function Class() {
           message={message}
         />
       )}
-      <Box
-        sx={{ padding: "40px 10px 20px 10px" }}
-      >
+      <Box sx={{ padding: "40px 10px 20px 10px" }}>
         <Box
           sx={{
             display: "flex",
@@ -184,9 +162,7 @@ export default function Class() {
         </Box>
 
         <Box component={"div"} sx={{ padding: "40px" }}>
-          <Paper
-            sx={{ padding: "20px", margin: "10px" }}
-          >
+          <Paper sx={{ padding: "20px", margin: "10px" }}>
             {isEdit ? (
               <Typography
                 variant="h4"
@@ -201,64 +177,55 @@ export default function Class() {
               >
                 Add New  Class
               </Typography>
-            )}{" "}
+            )}
             <Box
               component="form"
               noValidate
               autoComplete="off"
-              onSubmit={Formik.handleSubmit}
+              onSubmit={formik.handleSubmit}
             >
-
-
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
+                id="class_text"
                 label="Class Text "
                 variant="outlined"
                 name="class_text"
-                value={Formik.values.class_text}
-                onChange={Formik.handleChange}
-                onBlur={Formik.handleBlur}
+                value={formik.values.class_text}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
-              {Formik.touched.class_text && Formik.errors.class_text && (
+              {formik.touched.class_text && formik.errors.class_text && (
                 <p style={{ color: "red", textTransform: "capitalize" }}>
-                  {Formik.errors.class_text}
+                  {formik.errors.class_text}
                 </p>
               )}
-
 
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
-                id="filled-basic"
+                id="class_num"
                 label="Class Number "
                 variant="outlined"
                 name="class_num"
-                value={Formik.values.class_num}
-                onChange={Formik.handleChange}
-                onBlur={Formik.handleBlur}
+                value={formik.values.class_num}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
               />
-              {Formik.touched.class_num && Formik.errors.class_num && (
+              {formik.touched.class_num && formik.errors.class_num && (
                 <p style={{ color: "red", textTransform: "capitalize" }}>
-                  {Formik.errors.class_num}
+                  {formik.errors.class_num}
                 </p>
               )}
-
-
-
-
-
-
-
 
               <Box sx={{ marginTop: "10px" }} component={"div"}>
                 <Button
                   type="submit"
                   sx={{ marginRight: "10px" }}
                   variant="contained"
+                  disabled={isSubmitting}
                 >
-                  Submit
+                  {isSubmitting ? <CircularProgress size={24} color="inherit" /> : "Submit"}
                 </Button>
                 {isEdit && (
                   <Button
@@ -274,17 +241,12 @@ export default function Class() {
           </Paper>
         </Box>
 
-
-
         <Box>
-
-          {studentClass.map((value, i) => (
-
-            <Paper key={value._id} sx={{ p: 2, m: 2, display: "inline-block", }}>
+          {studentClass.map((value) => (
+            <Paper key={value._id} sx={{ p: 2, m: 2, display: "inline-block" }}>
               <Box>
                 <Typography variant="h4">Class :{value.class_text} [{value.class_num}]</Typography>
                 <Typography variant="h4">{value.message}</Typography>
-
               </Box>
               <Box component={'div'} sx={{ width: '80%', margin: "auto" }}>
                 <IconButton onClick={() => handleEdit(value._id)} color="primary">
@@ -296,8 +258,6 @@ export default function Class() {
               </Box>
             </Paper>
           ))}
-
-
         </Box>
       </Box>
     </>

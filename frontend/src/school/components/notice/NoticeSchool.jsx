@@ -4,6 +4,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
 import { baseUrl } from "../../../environment";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const NoticeSchool = () => {
   const [formData, setFormData] = useState({ title: "", message: "", audience: "" });
@@ -11,6 +12,7 @@ const NoticeSchool = () => {
   const [audience, setAudience] = useState("all");
   const [isEditing, setIsEditing] = useState(false); // Track if we are in edit mode
   const [editNoticeId, setEditNoticeId] = useState(null); // Store the ID of the notice being edited
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -33,30 +35,28 @@ const NoticeSchool = () => {
   // Add or Edit Notice
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
 
-    if (isEditing) {
-      // Update notice
-      try {
+    try {
+      if (isEditing) {
         await axios.put(`${baseUrl}/notices/${editNoticeId}`, formData);
         alert("Notice updated successfully!");
-        setIsEditing(false); // Reset to add mode
-        setEditNoticeId(null); // Clear edit ID
-      } catch (error) {
-        alert("Failed to update notice.");
-      }
-    } else {
-      // Add new notice
-      try {
+        setIsEditing(false);
+        setEditNoticeId(null);
+      } else {
         await axios.post(`${baseUrl}/notices/add`, formData);
         alert("Notice added successfully!");
-      } catch (error) {
-        alert("Failed to add notice.");
       }
-    }
 
-    setFormData({ title: "", message: "", audience: "" }); // Clear form
-    fetchNotices(); // Refresh notices list
+      setFormData({ title: "", message: "", audience: "" });
+      fetchNotices();
+    } catch (error) {
+      alert(isEditing ? "Failed to update notice." : "Failed to add notice.");
+    } finally {
+      setLoading(false);
+    }
   };
+
 
   // Set form data for editing
   const handleEdit = (notice) => {
@@ -67,22 +67,22 @@ const NoticeSchool = () => {
 
   // Delete Notice
   const handleDelete = async (id) => {
-    if(confirm("Are you sure you want to delete?")){
-        try {
-            await axios.delete(`${baseUrl}/notices/${id}`);
-            alert("Notice deleted successfully!");
-            fetchNotices();
-          } catch (error) {
-            alert("Failed to delete notice.");
-          }
+    if (confirm("Are you sure you want to delete?")) {
+      try {
+        await axios.delete(`${baseUrl}/notices/${id}`);
+        alert("Notice deleted successfully!");
+        fetchNotices();
+      } catch (error) {
+        alert("Failed to delete notice.");
+      }
     }
-    
+
   };
 
   return (
     <>
-    <Box>
-        <Typography  variant="h2" sx={{textAlign:"center"}}>Notice</Typography></Box>
+      <Box>
+        <Typography variant="h2" sx={{ textAlign: "center" }}>Notice</Typography></Box>
       <Box component="form" onSubmit={handleSubmit} sx={{ p: 2 }}>
         <Typography variant="h6" >{isEditing ? "Edit Notice" : "Create New Notice"}</Typography>
         <TextField
@@ -119,9 +119,19 @@ const NoticeSchool = () => {
           <MenuItem value="teacher">Teacher</MenuItem>
         </Select>
 
-        <Button type="submit" variant="contained" color="primary">
+        {/* <Button type="submit" variant="contained" color="primary">
           {isEditing ? "Save Changes" : "Add Notice"}
+        </Button> */}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={loading}
+          startIcon={loading && <CircularProgress size={20} color="inherit" />}
+        >
+          {loading ? (isEditing ? "Saving..." : "Adding...") : (isEditing ? "Save Changes" : "Add Notice")}
         </Button>
+
         {isEditing && (
           <Button
             onClick={() => {
@@ -138,19 +148,19 @@ const NoticeSchool = () => {
       </Box>
 
       <Box>
-        <Typography sx={{textAlign:"center"}} variant="h3">Notice For <span style={{textTransform:"capitalize",color:"darkgreen"}}>{audience}</span></Typography>
+        <Typography sx={{ textAlign: "center" }} variant="h3">Notice For <span style={{ textTransform: "capitalize", color: "darkgreen" }}>{audience}</span></Typography>
         <Button variant="outlined" onClick={() => setAudience("student")}>Student Notices</Button>
         <Button variant="outlined" onClick={() => setAudience("teacher")} sx={{ ml: 2 }}> Teacher Notices</Button>
         <Button variant="outlined" onClick={() => setAudience("all")} sx={{ ml: 2 }}> All Notices</Button>
-     
+
         <Box sx={{ mt: 2 }}>
           {notices.map((notice) => (
-            <Paper key={notice._id} sx={{ p: 2, m: 2, display: "inline-block"}}>
+            <Paper key={notice._id} sx={{ p: 2, m: 2, display: "inline-block" }}>
               <Box>
                 <Typography variant="h5">{notice.title}</Typography>
                 <Typography variant="p">{notice.message}</Typography>
                 <Typography variant="body2" sx={{ mt: 1, display: "block" }}>
-                  Audience: {notice.audience} <br/>
+                  Audience: {notice.audience} <br />
                   Posted On: {new Date(notice.date).toLocaleDateString()}
                 </Typography>
               </Box>
