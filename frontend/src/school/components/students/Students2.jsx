@@ -78,6 +78,8 @@ export default function Students() {
           student_class: data.student_class._id,
           gender: data.gender,
           age: data.age,
+          address:data.address,
+          dob:data.dob,
           guardian: data.guardian,
           guardian_phone: data.guardian_phone,
           password: data.password,

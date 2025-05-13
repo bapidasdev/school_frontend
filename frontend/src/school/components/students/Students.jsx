@@ -19,6 +19,12 @@ import CustomizedSnackbars from "../../../basic utility components/CustomizedSna
 import { studentSchema } from "../../../yupSchema/studentSchema";
 import StudentCardAdmin from "../../utility components/student card/StudentCard";
 
+
+
+// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+
 export default function Students() {
   const [studentClass, setStudentClass] = useState([]);
   const [students, setStudents] = useState([]);
@@ -88,7 +94,7 @@ export default function Students() {
           guardian_phone: data.guardian_phone,
           password: data.password,
         });
-        setImageUrl(data.image); 
+        setImageUrl(data.image);
         setEditId(data._id);
       })
       .catch(() => console.log("Error in fetching edit data."));
@@ -192,9 +198,9 @@ export default function Students() {
   const fileInputRef = useRef(null);
   const handleClearFile = () => {
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""; 
+      fileInputRef.current.value = "";
     }
-    setFile(null); 
+    setFile(null);
     setImageUrl(null);
   };
 
@@ -362,7 +368,7 @@ export default function Students() {
                   {Formik.errors.address}
                 </p>
               )}
-
+              {/* ------------------------------------------------------------------------------------------------- */}
               <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
@@ -379,6 +385,28 @@ export default function Students() {
                 </p>
               )}
 
+              {/* <LocalizationProvider dateAdapter={AdapterDayjs}  sx={{ marginTop: "10px" }}>
+                <DatePicker
+                  label="Date of Birth"
+                  value={Formik.values.dob || null}
+                  onChange={(value) => Formik.setFieldValue("dob", value)}
+                  onBlur={Formik.handleBlur}
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      fullWidth
+                      sx={{ marginTop: "10px" }}
+                      name="dob"
+                    />
+                  )}
+                />
+              </LocalizationProvider> */}
+
+
+
+
+
+              {/* ------------------------------------------------------------------------------------------------- */}
               <TextField
                 fullWidth
                 select

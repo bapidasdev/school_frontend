@@ -17,7 +17,12 @@ import {
   Table,
   TableContainer,
   IconButton,
-  CircularProgress, // <- loader
+  CircularProgress,
+  CardContent,
+  Stack,
+  Divider,
+  CardActions,
+  Card, // <- loader
 } from "@mui/material";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -150,16 +155,7 @@ export default function Class() {
         />
       )}
       <Box sx={{ padding: "40px 10px 20px 10px" }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          component={"div"}
-        >
-          <Typography className="text-beautify2 hero-text" variant="h2">Class</Typography>
-        </Box>
+      
 
         <Box component={"div"} sx={{ padding: "40px" }}>
           <Paper sx={{ padding: "20px", margin: "10px" }}>
@@ -241,22 +237,39 @@ export default function Class() {
           </Paper>
         </Box>
 
-        <Box>
+       
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, p: 2 }}>
           {studentClass.map((value) => (
-            <Paper key={value._id} sx={{ p: 2, m: 2, display: "inline-block" }}>
-              <Box>
-                <Typography variant="h4">Class :{value.class_text} [{value.class_num}]</Typography>
-                <Typography variant="h4">{value.message}</Typography>
-              </Box>
-              <Box component={'div'} sx={{ width: '80%', margin: "auto" }}>
+            <Card
+              key={value._id}
+              sx={{
+                width: 300,
+                borderRadius: 3,
+                boxShadow: 3,
+                transition: '0.3s',
+                '&:hover': { boxShadow: 6 },
+              }}
+            >
+              <CardContent>
+                <Stack spacing={1}>
+                  <Typography variant="h6" color="primary">
+                    Class: {value.class_text} [{value.class_num}]
+                  </Typography>
+                  <Divider />
+                  <Typography variant="body1" color="text.secondary">
+                    {value.message}
+                  </Typography>
+                </Stack>
+              </CardContent>
+              <CardActions sx={{ justifyContent: 'center' }}>
                 <IconButton onClick={() => handleEdit(value._id)} color="primary">
                   <EditIcon />
                 </IconButton>
-                <IconButton onClick={() => handleDelete(value._id)} color="secondary">
+                <IconButton onClick={() => handleDelete(value._id)} color="error">
                   <DeleteIcon />
                 </IconButton>
-              </Box>
-            </Paper>
+              </CardActions>
+            </Card>
           ))}
         </Box>
       </Box>
