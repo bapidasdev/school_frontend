@@ -21,9 +21,9 @@ import StudentCardAdmin from "../../utility components/student card/StudentCard"
 
 
 
-// import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-// import { DatePicker } from '@mui/x-date-pickers/DatePicker';
-// import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 export default function Students() {
   const [studentClass, setStudentClass] = useState([]);
@@ -337,7 +337,7 @@ export default function Students() {
                 </p>
               )}
 
-              <TextField
+              {/* <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
                 label="Age"
@@ -346,6 +346,29 @@ export default function Students() {
                 value={Formik.values.age}
                 onChange={Formik.handleChange}
                 onBlur={Formik.handleBlur}
+              />
+              {Formik.touched.age && Formik.errors.age && (
+                <p style={{ color: "red", textTransform: "capitalize" }}>
+                  {Formik.errors.age}
+                </p>
+              )} */}
+
+              <TextField
+                fullWidth
+                sx={{ marginTop: "10px" }}
+                label="Age"
+                variant="outlined"
+                name="age"
+                value={Formik.values.age}
+                onChange={(e) => {
+                  const numericValue = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                  Formik.setFieldValue("age", numericValue);
+                }}
+                onBlur={Formik.handleBlur}
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-4]*',
+                }}
               />
               {Formik.touched.age && Formik.errors.age && (
                 <p style={{ color: "red", textTransform: "capitalize" }}>
@@ -369,7 +392,7 @@ export default function Students() {
                 </p>
               )}
               {/* ------------------------------------------------------------------------------------------------- */}
-              <TextField
+              {/* <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
                 label="Date of Birth"
@@ -383,13 +406,16 @@ export default function Students() {
                 <p style={{ color: "red", textTransform: "capitalize" }}>
                   {Formik.errors.dob}
                 </p>
-              )}
+              )} */}
 
-              {/* <LocalizationProvider dateAdapter={AdapterDayjs}  sx={{ marginTop: "10px" }}>
+              <LocalizationProvider dateAdapter={AdapterDayjs} sx={{ marginTop: "10px" }}>
                 <DatePicker
                   label="Date of Birth"
                   value={Formik.values.dob || null}
-                  onChange={(value) => Formik.setFieldValue("dob", value)}
+                  onChange={(value) => {
+                    Formik.setFieldValue("dob", value);
+                    console.log("Selected Date:", value); // Logs the selected date
+                  }}
                   onBlur={Formik.handleBlur}
                   renderInput={(params) => (
                     <TextField
@@ -400,7 +426,10 @@ export default function Students() {
                     />
                   )}
                 />
-              </LocalizationProvider> */}
+
+
+              </LocalizationProvider>
+
 
 
 
@@ -447,7 +476,7 @@ export default function Students() {
                 </p>
               )}
 
-              <TextField
+              {/* <TextField
                 fullWidth
                 sx={{ marginTop: "10px" }}
                 label="Guardian Phone"
@@ -456,6 +485,30 @@ export default function Students() {
                 value={Formik.values.guardian_phone}
                 onChange={Formik.handleChange}
                 onBlur={Formik.handleBlur}
+              />
+              {Formik.touched.guardian_phone && Formik.errors.guardian_phone && (
+                <p style={{ color: "red", textTransform: "capitalize" }}>
+                  {Formik.errors.guardian_phone}
+                </p>
+              )} */}
+
+              <TextField
+                fullWidth
+                sx={{ marginTop: "10px" }}
+                label="Guardian Phone"
+                variant="outlined"
+                name="guardian_phone"
+                value={Formik.values.guardian_phone}
+                onChange={(e) => {
+                  // Remove all non-numeric characters
+                  const numericValue = e.target.value.replace(/\D/g, '');
+                  Formik.setFieldValue("guardian_phone", numericValue);
+                }}
+                onBlur={Formik.handleBlur}
+                inputProps={{
+                  inputMode: 'numeric',
+                  pattern: '[0-9]*'
+                }}
               />
               {Formik.touched.guardian_phone && Formik.errors.guardian_phone && (
                 <p style={{ color: "red", textTransform: "capitalize" }}>
